@@ -116,7 +116,7 @@ public class ShopDetailEntity {
             private int p4p;
             private int p4p_itemcnt;
             private int p4p_keycnt;
-            private int price;
+            private double price;
             private int priceChange;
             private double ratio;
             private int sales;
@@ -260,11 +260,11 @@ public class ShopDetailEntity {
                 this.p4p_keycnt = p4p_keycnt;
             }
 
-            public int getPrice() {
+            public double getPrice() {
                 return price;
             }
 
-            public void setPrice(int price) {
+            public void setPrice(double price) {
                 this.price = price;
             }
 

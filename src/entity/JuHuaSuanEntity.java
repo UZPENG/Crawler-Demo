@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author serverliu on 2017/12/20.
  */
-public class JuHuaSuan {
+public class JuHuaSuanEntity {
 
     /**
      * api_name : shop_get_market_juhuasuan_list
@@ -50,7 +50,7 @@ public class JuHuaSuan {
          */
 
         private int amountTotal;
-        private int priceTotal;
+        private double priceTotal;
         private int total;
         private List<ListBean> list;
 
@@ -62,11 +62,11 @@ public class JuHuaSuan {
             this.amountTotal = amountTotal;
         }
 
-        public int getPriceTotal() {
+        public double getPriceTotal() {
             return priceTotal;
         }
 
-        public void setPriceTotal(int priceTotal) {
+        public void setPriceTotal(double priceTotal) {
             this.priceTotal = priceTotal;
         }
 
@@ -102,10 +102,10 @@ public class JuHuaSuan {
             private int amount;
             private long date;
             private long itemId;
-            private int oriPrice;
+            private double oriPrice;
             private String position;
-            private int price;
-            private int realPrice;
+            private double price;
+            private double realPrice;
             private int shopId;
             private String title;
 
@@ -133,11 +133,11 @@ public class JuHuaSuan {
                 this.itemId = itemId;
             }
 
-            public int getOriPrice() {
+            public double getOriPrice() {
                 return oriPrice;
             }
 
-            public void setOriPrice(int oriPrice) {
+            public void setOriPrice(double oriPrice) {
                 this.oriPrice = oriPrice;
             }
 
@@ -149,15 +149,15 @@ public class JuHuaSuan {
                 this.position = position;
             }
 
-            public int getPrice() {
+            public double getPrice() {
                 return price;
             }
 
-            public void setPrice(int price) {
+            public void setPrice(double price) {
                 this.price = price;
             }
 
-            public int getRealPrice() {
+            public double getRealPrice() {
                 return realPrice;
             }
 

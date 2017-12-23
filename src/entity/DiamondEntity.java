@@ -82,7 +82,7 @@ public class DiamondEntity {
             private String imageUrl;
             private String position;
             private String positionType;
-            private int price;
+            private double price;
 
             public int getAmount() {
                 return amount;
@@ -132,11 +132,11 @@ public class DiamondEntity {
                 this.positionType = positionType;
             }
 
-            public int getPrice() {
+            public double getPrice() {
                 return price;
             }
 
-            public void setPrice(int price) {
+            public void setPrice(double price) {
                 this.price = price;
             }
         }

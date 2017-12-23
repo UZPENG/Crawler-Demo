@@ -1,36 +1,30 @@
 package model;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import entity.OfferDetailInfo;
-import entity.OfferList;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
+import entity.OfferEntity;
 import okhttp3.Response;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author serverliu on 2017/12/18.
  */
 public class GetDataModel {
-    private static String shopName="鸿星尔克";
+    private static String shopName="特步";
     private static  HttpClient client = new HttpClient();
-    private static List<List<OfferDetailInfo.OfferDetail.OfferInfo>> offerInfo = new ArrayList<>();
-    private static List<OfferDetailInfo.OfferDetail.OfferInfo> tmpInfo = new ArrayList<>();
-    private static  OfferList list;
+    private static List<List<OfferDetailInfo.DataBean.ListBean>> offerInfo = new ArrayList<>();
+    private static List<OfferDetailInfo.DataBean.ListBean> tmpInfo = new ArrayList<>();
+    private static OfferEntity list;
     private static ArrayList<String> datas = new ArrayList<>();
     private static int count = 0;
     private static int total = 30;
@@ -44,8 +38,8 @@ public class GetDataModel {
             String responseStr = response.body().string();
             if(responseStr != null){
                 System.out.println("交易列表返回成功！");
-                Gson gson = new Gson();
-                list = gson.fromJson(responseStr, OfferList.class);
+                Gson gson = new GsonBuilder().serializeNulls().setLenient().create();
+                list = gson.fromJson(responseStr, OfferEntity.class);
                 ParseData(list);
                 outputToExcel();
             } else {
@@ -56,16 +50,16 @@ public class GetDataModel {
         }
     }
 
-    private static void ParseData(OfferList list){
+    private static void ParseData(OfferEntity list){
         System.out.println("开始请求交易详情。。。。");
-        for (OfferList.Offer offer:
+        for (OfferEntity.Offer offer:
              list.getData()) {
             SimpleDateFormat format =  new SimpleDateFormat( " yyyy-MM-dd" );
             datas.add(format.format(offer.getDate()));
 
             total = 30;
             RequestDetail(offer.getDate());
-            ArrayList<OfferDetailInfo.OfferDetail.OfferInfo> tmp = new ArrayList<>();
+            ArrayList<OfferDetailInfo.DataBean.ListBean> tmp = new ArrayList<>();
             tmp.addAll(tmpInfo);
             offerInfo.add(tmp);
             tmpInfo.clear();
@@ -85,7 +79,9 @@ public class GetDataModel {
                 Response response =  client.request(actualUrl);
                 String responseStr = response.body().string();
                 if(responseStr != null){
-                    OfferDetailInfo detailInfo = new Gson().fromJson(responseStr, OfferDetailInfo.class);
+                    Gson gson = new GsonBuilder().serializeNulls().setLenient().create();
+                    responseStr = responseStr.replaceAll("\\\\\\\\\"","");
+                    OfferDetailInfo detailInfo = gson.fromJson(responseStr, OfferDetailInfo.class);
                     tmpInfo.addAll(detailInfo.getData().getList());
                     total = detailInfo.getData().getTotal();
                     count += 30;
@@ -93,7 +89,8 @@ public class GetDataModel {
                 }
             } catch (Exception e){
                 e.printStackTrace();
-                System.out.println("错误！");
+                System.out.println("第"+num+"个错误！");
+                System.exit(0);
             }
         }
     }
@@ -117,9 +114,9 @@ public class GetDataModel {
             System.out.println("开始写入文件。。。");
 //            ArrayList<List<OfferDetailInfo.OfferDetail.OfferInfo>> copyOnWriteArrayList = new ArrayList<>();
 //            copyOnWriteArrayList.addAll(offerInfo);
-            for (List<OfferDetailInfo.OfferDetail.OfferInfo> infos:
+            for (List<OfferDetailInfo.DataBean.ListBean> infos:
                     offerInfo) {
-                for (OfferDetailInfo.OfferDetail.OfferInfo info : infos) {
+                for (OfferDetailInfo.DataBean.ListBean info : infos) {
                     Row r = sheet.createRow(rowIndex++);
                     int cellIndex = 0;
 

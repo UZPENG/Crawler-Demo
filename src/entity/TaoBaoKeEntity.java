@@ -89,9 +89,9 @@ public class TaoBaoKeEntity {
             private long itemId;
             private double payPrice;
             private double payPrice30;
-            private int payRate;
-            private int price;
-            private int price_;
+            private double payRate;
+            private double price;
+            private double price_;
             private int shopId;
             private String title;
 
@@ -151,27 +151,27 @@ public class TaoBaoKeEntity {
                 this.payPrice30 = payPrice30;
             }
 
-            public int getPayRate() {
+            public double getPayRate() {
                 return payRate;
             }
 
-            public void setPayRate(int payRate) {
+            public void setPayRate(double payRate) {
                 this.payRate = payRate;
             }
 
-            public int getPrice() {
+            public double getPrice() {
                 return price;
             }
 
-            public void setPrice(int price) {
+            public void setPrice(double price) {
                 this.price = price;
             }
 
-            public int getPrice_() {
+            public double getPrice_() {
                 return price_;
             }
 
-            public void setPrice_(int price_) {
+            public void setPrice_(double price_) {
                 this.price_ = price_;
             }
 

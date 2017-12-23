@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class HttpClient {
     private OkHttpClient client = new OkHttpClient();
-    private String Cookie = "auth=323d741977c3205171ae4f235c34a1f2fbf7eaf0";
+    private String Cookie = "auth=381de45adfdcfdc9d05b0ae8180d3f48bf760f4a";
 
 
     public Response request(String url){
@@ -19,127 +19,6 @@ public class HttpClient {
                 .url(url)
                 .addHeader("Cookie",Cookie)
                 .get()
-                .build();
-
-        try {
-            return client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
-    public Response RequestUnSale(String url, JSONObject para){
-        String actualUrl = url + "&" + Key.insertDate +"=" +
-                para.opt(Key.insertDate) + "&" + Key.pageNo + "="+para.opt(Key.pageNo);
-
-        Request request = new Request.Builder()
-                .url(actualUrl)
-                .get()
-                .addHeader("Cookie",Cookie)
-                .build();
-
-        try {
-            return client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Response RequestNewItem(String url, JSONObject para){
-        String actualUrl = url + "&" + Key.insertDate +"=" +
-                para.opt(Key.insertDate) + "&" + Key.pageNo + "="+para.opt(Key.pageNo);
-
-        Request request = new Request.Builder()
-                .url(actualUrl)
-                .get()
-                .addHeader("Cookie",Cookie)
-                .build();
-
-        try {
-            return client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Response ReuqestDetail(String url, JSONObject para){
-        String actualUrl =  url +"&id="+para.opt("id");
-
-        Request request = new Request.Builder()
-                .url(actualUrl)
-                .get()
-                .addHeader("Cookie",Cookie)
-                .build();
-
-        try {
-            return client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-    public Response RequestShopDetail(String url, JSONObject para){
-        String actualUrl =  url +"&id="+para.opt("id");
-
-        Request request = new Request.Builder()
-                .url(actualUrl)
-                .get()
-                .addHeader("Cookie",Cookie)
-                .build();
-
-        try {
-            return client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Response RequestRenameRecord(String url, JSONObject para){
-        String actualUrl =  url +"&id="+para.opt("id");
-
-        Request request = new Request.Builder()
-                .url(actualUrl)
-                .get()
-                .addHeader("Cookie",Cookie)
-                .build();
-
-        try {
-            return client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Response RequestZuanZhan(String url, JSONObject para){
-        String actualUrl =  url +"&id="+para.opt("id");
-
-        Request request = new Request.Builder()
-                .url(actualUrl)
-                .get()
-                .addHeader("Cookie",Cookie)
-                .build();
-
-        try {
-            return client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Response RequestAdAct(String url, JSONObject para){
-        String actualUrl =  url +"&id="+para.opt("id");
-
-        Request request = new Request.Builder()
-                .url(actualUrl)
-                .get()
-                .addHeader("Cookie",Cookie)
                 .build();
 
         try {

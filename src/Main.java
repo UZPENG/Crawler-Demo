@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import entity.*;
 import model.HttpClient;
 import model.Key;
@@ -13,6 +14,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,48 +23,48 @@ import java.util.List;
  */
 @SuppressWarnings("ALL")
 public class Main {
-    private static String shopName="鸿星尔克";
+    private static String shopName="特步";
 
     private static HttpClient client = new HttpClient();
-    private static List<UnSale.DataBean.ListBean> list = new ArrayList<>();
+    private static List<UnSaleEntity.DataBean.ListBean> list = new ArrayList<>();
     private static List<NewItemEntity.DataBean.ListBean> newItemEntity=new ArrayList<>();
     private static List<ItemDetalEntity.DataBean> itemDetals = new ArrayList<>();
     private static List<ShopDetailEntity.DataBean.ListBean> shopDetail = new ArrayList<>();
     private static List<RenameEntity.DataBean.ListBean> renameList = new ArrayList<>();
     private static List<DiamondEntity.DataBean.ListBean> zuanshiList = new ArrayList<>();
     private static List<TaoBaoKeEntity.DataBean.ListBean> taobaokeList = new ArrayList<>();
-    private static List<JuHuaSuan.DataBean.ListBean> juhuasuanList = new ArrayList<>();
+    private static List<JuHuaSuanEntity.DataBean.ListBean> juhuasuanList = new ArrayList<>();
     private static int count = 0;
     private static int total = 30;
 
     public static void main(String[] arg){
-//       RequestUnSale();
-//       RequestDetails();
-//       outputToExcelUnSale();
-//       count = 0;
-//       total = 30;
-//       RequestNewItem();
-//       outputToExcelUpdate();
-//        count = 0;
-//        total = 30;
+       RequestUnSale();
+       RequestItemDetails();
+       outputToExcelUnSale();
+       count = 0;
+       total = 30;
+       RequestNewItem();
+       outputToExcelUpdate();
+        count = 0;
+        total = 30;
         RequestShopDetails();
         outputToExcelShopDetail();
         count = 0;
         total = 30;
-//        RequestRename();
-//        outputToExcelRename();
-//        count = 0;
-//        total = 30;
-//        RequestDiomond();
-//        outputToExcelZuanShi();
-//        count = 0;
-//        total = 30;
-//        RequestJuHuaSuan();
-//        outputToExcelJuHuaSuan();
-//        count = 0;
-//        total = 30;
-//        RequestTaobaoke();
-//        outputToExcelTaoBaoKe();
+        RequestRename();
+        outputToExcelRename();
+        count = 0;
+        total = 30;
+        RequestDiomond();
+        outputToExcelZuanShi();
+        count = 0;
+        total = 30;
+        RequestJuHuaSuan();
+        outputToExcelJuHuaSuan();
+        count = 0;
+        total = 30;
+        RequestTaobaoke();
+        outputToExcelTaoBaoKe();
     }
 
     private static void RequestUnSale(){
@@ -71,12 +73,13 @@ public class Main {
 
         if(count < total) {
             try {
-                Response response = client.request(Url.URL_UNSALE);
+                Response response = client.request(actualUrl);
                 String responseStr = response.body().string();
                 if (responseStr != null) {
                     System.out.println("交易列表返回成功！");
-                    Gson gson = new Gson();
-                    UnSale tmp = gson.fromJson(responseStr, UnSale.class);
+                    Gson gson = new GsonBuilder().serializeNulls().setLenient().create();
+                    responseStr = responseStr.replaceAll("\\\\\\\\\"","");
+                    UnSaleEntity tmp = gson.fromJson(responseStr, UnSaleEntity.class);
                     list.addAll(tmp.getData().getList());
                     total = tmp.getData().getTotal();
                     count += 30;
@@ -93,16 +96,16 @@ public class Main {
 
     private static void RequestNewItem(){
         int num = (count/30) + 1;
-        final JSONObject para = new JSONObject();
-        para.put(Key.pageNo, num);
+        String actualUrl = Url.URL_NEW_ITEM + "&pageNo=" +num;
 
         if(count < total) {
-            Response response = client.RequestNewItem(Url.URL_NEW_ITEM, para);
+            Response response = client.request(actualUrl);
             try {
                 String responseStr = response.body().string();
                 if (responseStr != null) {
                     System.out.println("交易列表返回成功！");
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder().serializeNulls().setLenient().create();
+                    responseStr = responseStr.replaceAll("\\\\\\\\\"","");
                     NewItemEntity tmp = gson.fromJson(responseStr, NewItemEntity.class);
                     newItemEntity.addAll(tmp.getData().getList());
                     total = tmp.getData().getTotal();
@@ -117,18 +120,19 @@ public class Main {
         }
     }
 
-    private static void RequestDetails(){
-        for (UnSale.DataBean.ListBean item :
+    private static void RequestItemDetails(){
+        for (UnSaleEntity.DataBean.ListBean item :
                 list) {
-            final JSONObject para = new JSONObject();
-            para.put("id", item.getId());
+            String actualUrl = Url.URL_ITEM_DETAIL + "&id=" +item.getId();
 
-            Response response = client.ReuqestDetail(Url.URL_ITEM_DETAIL, para);
+
+            Response response = client.request(actualUrl);
             try {
                 String responseStr = response.body().string();
                 if (responseStr != null) {
                     System.out.println("交易列表返回成功！");
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder().serializeNulls().setLenient().create();
+                    responseStr = responseStr.replaceAll("\\\\\\\\\"","");
                     ItemDetalEntity tmp = gson.fromJson(responseStr, ItemDetalEntity.class);
                     itemDetals.add(tmp.getData());
                 } else {
@@ -141,24 +145,24 @@ public class Main {
     }
 
     private static void RequestShopDetails(){
-        int count = 0;
-        final JSONObject para = new JSONObject();
         long startDate = 1513353600000l;
         long endDate = 1513872000000l;
-        para.put("startDate",String.valueOf(startDate - (count * 5181400000l)));
-        para.put("endDate",String.valueOf(endDate - (count * 5181400000l)));
+
+        String actualUrl = Url.URL_SHOP_DETIAL + "&startDate=" + String.valueOf(startDate - (count * 604800000l))
+                + "&endDate=" + String.valueOf(endDate - (count * 604800000l));
 
         if(count < 4) {
-            Response response = client.ReuqestDetail(Url.URL_SHOP_DETIAL, para);
+            Response response = client.request(actualUrl);
             try {
                 String responseStr = response.body().string();
                 if (responseStr != null) {
                     System.out.println("交易列表返回成功！");
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder().serializeNulls().setLenient().create();
+                    responseStr = responseStr.replaceAll("\\\\\\\\\"","");
                     ShopDetailEntity tmp = gson.fromJson(responseStr, ShopDetailEntity.class);
                     shopDetail.addAll(tmp.getData().getList());
                     count += 1;
-                    RequestNewItem();
+                    RequestShopDetails();
                 } else {
                     System.out.println("错误！返回列表为空！");
                 }
@@ -170,21 +174,21 @@ public class Main {
 
     private static void RequestRename(){
         int num = (count/30) + 1;
-        final JSONObject para = new JSONObject();
-        para.put(Key.pageNo, num);
+        String actualUrl = Url.URL_RENAME + "&pageNo=" +num;
 
         if(count < total) {
-            Response response = client.RequestUnSale(Url.URL_RENAME, para);
+            Response response = client.request(actualUrl);
             try {
                 String responseStr = response.body().string();
                 if (responseStr != null) {
                     System.out.println("交易列表返回成功！");
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder().serializeNulls().setLenient().create();
+                    responseStr = responseStr.replaceAll("\\\\\\\\\"","");
                     RenameEntity tmp = gson.fromJson(responseStr, RenameEntity.class);
                     renameList.addAll(tmp.getData().getList());
                     total = tmp.getData().getTotal();
                     count += 30;
-                    RequestNewItem();
+                    RequestRename();
                 } else {
                     System.out.println("错误！返回列表为空！");
                 }
@@ -196,21 +200,21 @@ public class Main {
 
     private static void RequestDiomond(){
         int num = (count/30) + 1;
-        final JSONObject para = new JSONObject();
-        para.put(Key.pageNo, num);
+        String actualUrl = Url.URL_ZUANSHI + "&pageNo=" +num;
 
         if(count < total) {
-            Response response = client.RequestUnSale(Url.URL_ZUANSHI, para);
+            Response response = client.request(actualUrl);
             try {
                 String responseStr = response.body().string();
                 if (responseStr != null) {
                     System.out.println("交易列表返回成功！");
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder().serializeNulls().setLenient().create();
+                    responseStr = responseStr.replaceAll("\\\\\\\\\"","");
                     DiamondEntity tmp = gson.fromJson(responseStr, DiamondEntity.class);
                     zuanshiList.addAll(tmp.getData().getList());
                     total = tmp.getData().getTotal();
                     count += 30;
-                    RequestNewItem();
+                    RequestDiomond();
                 } else {
                     System.out.println("错误！返回列表为空！");
                 }
@@ -222,21 +226,20 @@ public class Main {
 
     private static void RequestTaobaoke(){
         int num = (count/30) + 1;
-        final JSONObject para = new JSONObject();
-        para.put(Key.pageNo, num);
-
+        String actualUrl =Url.URL_TAOBAOKE + "&pageNo=" +num;
         if(count < total) {
-            Response response = client.RequestUnSale(Url.URL_TAOBAOKE, para);
+            Response response = client.request(actualUrl);
             try {
                 String responseStr = response.body().string();
                 if (responseStr != null) {
                     System.out.println("交易列表返回成功！");
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder().serializeNulls().setLenient().create();
+                    responseStr = responseStr.replaceAll("\\\\\\\\\"","");
                     TaoBaoKeEntity tmp = gson.fromJson(responseStr, TaoBaoKeEntity.class);
                     taobaokeList.addAll(tmp.getData().getList());
                     total = tmp.getData().getTotal();
                     count += 30;
-                    RequestNewItem();
+                    RequestTaobaoke();
                 } else {
                     System.out.println("错误！返回列表为空！");
                 }
@@ -248,21 +251,23 @@ public class Main {
 
     private static void RequestJuHuaSuan(){
         int num = (count/30) + 1;
-        final JSONObject para = new JSONObject();
-        para.put(Key.pageNo, num);
+        String actualUrl = Url.URL_JUHUASUAN + "&pageNo=" +num;
 
         if(count < total) {
-            Response response = client.RequestUnSale(Url.URL_JUHUASUAN, para);
+            Response response = client.request(actualUrl);
             try {
                 String responseStr = response.body().string();
                 if (responseStr != null) {
                     System.out.println("交易列表返回成功！");
-                    Gson gson = new Gson();
-                    JuHuaSuan tmp = gson.fromJson(responseStr, JuHuaSuan.class);
+                    GsonBuilder builder = new GsonBuilder();
+
+                    Gson gson = builder.serializeNulls().setLenient().create();
+                    responseStr = responseStr.replaceAll("\\\\\\\\\"","");
+                    JuHuaSuanEntity tmp = gson.fromJson(responseStr, JuHuaSuanEntity.class);
                     juhuasuanList.addAll(tmp.getData().getList());
                     total = tmp.getData().getTotal();
                     count += 30;
-                    RequestNewItem();
+                    RequestJuHuaSuan();
                 } else {
                     System.out.println("错误！返回列表为空！");
                 }
@@ -348,8 +353,9 @@ public class Main {
 
     public static void outputToExcelShopDetail(){
         String[] titles = new String[]{"日期","销售量","销售额","销售商品数","动销率",
-                "总宝贝数","上新","上架","改价","改标题","自然引流宝贝","自然引流词","首屏宝贝"
-                ,"首屏词","PC端词","PC端宝贝","移动端词","移动端宝贝","钻石展位","聚划算","淘宝客"};
+                "总宝贝数","上新","上架","改价","改标题","PC自然引流宝贝","PC自然引流词","豆腐块宝贝"
+                ,"豆腐块词","移动端自然引流宝贝","移动端自然引流词","首屏宝贝","首屏词","PC端词","PC端宝贝",
+                "移动端词","移动端宝贝","钻石展位","聚划算","淘宝客"};
 //        String[] titles = new String[]{"时间","数目"};
 //        String[] ads = new String[]{"直通车","聚划算","钻石展位","站内活动","淘宝客"};
 
@@ -499,7 +505,7 @@ public class Main {
 //            ArrayList<List<OfferDetailInfo.OfferDetail.OfferInfo>> copyOnWriteArrayList = new ArrayList<>();
 //            copyOnWriteArrayList.addAll(offerInfo);
             SimpleDateFormat format =  new SimpleDateFormat( " yyyy-MM-dd" );
-            for (JuHuaSuan.DataBean.ListBean info : juhuasuanList) {
+            for (JuHuaSuanEntity.DataBean.ListBean info : juhuasuanList) {
                 Row r = sheet.createRow(rowIndex++);
                 int cellIndex = 0;
 
@@ -545,6 +551,7 @@ public class Main {
                 r.createCell(cellIndex++).setCellValue(format.format(info.getDate()));
                 r.createCell(cellIndex++).setCellValue(info.getTitle());
                 r.createCell(cellIndex++).setCellValue(info.getDiscount());
+                r.createCell(cellIndex++).setCellValue(info.getPrice());
                 r.createCell(cellIndex++).setCellValue(info.getPayRate());
                 r.createCell(cellIndex++).setCellValue(info.getPayPrice());
                 r.createCell(cellIndex++).setCellValue(info.getAmount_());

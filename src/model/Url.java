@@ -4,10 +4,10 @@ package model;
  * @author serverliu on 2017/12/18.
  */
 public interface Url {
-    String shopId = "&shopId=59915065";
-    String Id = "&id=59915065";
-    String startDate = "&startDate=1511193600000";
-    String endDate = "&endDate=";
+    String shopId = "&shopId=60036677";
+    String Id = "&id=60036677";
+    String startDate = "&startDate=1511366400000";
+    String endDate = "&endDate=1513872000000";
 
     String BASE_URL = "http://www.taosj.com/";
     String URL_OFFER_LIST = BASE_URL+"data/shop/offer/list?api_name=shop_get_offer_list"+startDate+endDate+"&stat="+Id;
@@ -20,13 +20,13 @@ public interface Url {
 
     String URL_RENAME = BASE_URL + "data/shop/item/onname/list?api_name=shop_get_item_onname_list"+startDate+endDate+"&p"+shopId;
     String URL_P4P = BASE_URL +"data/shop/item/np4p/list?api_name=data_shop_item_np4p_list&point=keyword&type=taobao&pageNo=1&pageSize=10&ins"+shopId;
-    String URL_ZUANSHI = BASE_URL+"data/shop/market/zz?api_name=shop_get_market_zuanzhan_list"+startDate+endDate+"&pageNo=1"+Id;
+    String URL_ZUANSHI = BASE_URL+"data/shop/market/zz?api_name=shop_get_market_zuanzhan_list"+startDate+endDate+"&pageSize=30&orderField=date&orderType=desc"+Id;
     String URL_INFLUENCE = BASE_URL + "data/shop/item/zz/list?api_name=data_shop_item_zz_list&pageNo=1&pageSize=10&orderField=date&orderType=desc"+shopId;
 
-    String URL_JUHUASUAN = BASE_URL + "data/shop/market/jhs?api_name=shop_get_market_juhuasuan_list" +
-            startDate+endDate+"&pageNo=1&pageSize=10&orderField=date&orderType=desc"+Id;
+    String URL_JUHUASUAN = BASE_URL + "data/shop/market/jhs?api_name=shop_get_market_juhuasuan_list" +Id+
+            startDate+endDate+"&pageSize=30&orderField=date&orderType=desc";
 
-    String URL_TAOBAOKE = BASE_URL + "data/shop/tbk/chart/list?api_name=data_shop_tbk_chart_list"+shopId;
+    String URL_TAOBAOKE = BASE_URL + "data/shop/market/tbk?api_name=data_shop_market_tbk"+Id+startDate+endDate+"&pageSize=30"+shopId;
     String URL_TAOJINBI = BASE_URL + "data/shop/market/innersite?api_name=data_shop_market_innersite" +
             "&id=59915065&position=tjb"+startDate+endDate+"&pageNo=1&pageSize=10&orderField=date&orderType=desc";
     String URL_QIANG = BASE_URL + "&position=qiang";
