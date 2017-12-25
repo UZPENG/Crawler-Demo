@@ -3,7 +3,7 @@ package entity;
 /**
  * @author serverliu on 2017/12/20.
  */
-public class ItemDetalEntity {
+public class ItemDetailEntity {
 
     /**
      * api_name : get_item_info

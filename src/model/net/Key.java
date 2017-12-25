@@ -1,4 +1,4 @@
-package model;
+package model.net;
 
 /**
  * @author serverliu on 2017/12/18.
