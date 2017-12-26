@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class WriteProxy {
 
-    public static String rootDir = "E://";
+    public static String rootDir = "E://spider/";
     public static final int FLAG_OFFER_DETAIL = 0;
     public static final int FLAG_RENAME = 1;
     public static final int FLAG_UPDATE = 2;

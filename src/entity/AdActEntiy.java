@@ -100,8 +100,8 @@ public class AdActEntiy {
             private int amount;
             private long date;
             private long itemId;
-            private int price;
-            private int price_;
+            private double price;
+            private double price_;
             private int shopId;
             private String title;
 
@@ -129,19 +129,19 @@ public class AdActEntiy {
                 this.itemId = itemId;
             }
 
-            public int getPrice() {
+            public double getPrice() {
                 return price;
             }
 
-            public void setPrice(int price) {
+            public void setPrice(double price) {
                 this.price = price;
             }
 
-            public int getPrice_() {
+            public double getPrice_() {
                 return price_;
             }
 
-            public void setPrice_(int price_) {
+            public void setPrice_(double price_) {
                 this.price_ = price_;
             }
 

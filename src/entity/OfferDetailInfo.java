@@ -61,7 +61,7 @@ public class OfferDetailInfo{
             private long id;
             private String image;
             private int juhuasuan;
-            private int oriPrice;
+            private double oriPrice;
             private int p4p;
             private double price;
             private double price1;
@@ -138,11 +138,11 @@ public class OfferDetailInfo{
                 this.juhuasuan = juhuasuan;
             }
 
-            public int getOriPrice() {
+            public double getOriPrice() {
                 return oriPrice;
             }
 
-            public void setOriPrice(int oriPrice) {
+            public void setOriPrice(double oriPrice) {
                 this.oriPrice = oriPrice;
             }
 

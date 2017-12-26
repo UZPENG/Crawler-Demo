@@ -9,4 +9,7 @@ public interface Key {
     String pageNo = "pageNo";
     String pageSize = "pageSize";
     String total = "total";
+    String startDate = "startDate";
+    String endDate = "endDate";
+    String shopId = "shopId";
 }

@@ -3,7 +3,9 @@ package model.net;
 import entity.*;
 import okhttp3.Response;
 
+import java.awt.*;
 import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,11 @@ public class RequestModel {
     private int total = 30;
 
     public List<OfferDetailInfo.DataBean.ListBean> requestShopOfferList(){
-        Response response = client.request(Url.URL_OFFER_LIST);
+        String para = new ParamWrapper.ParamBuilder()
+                .addDate()
+                .addId()
+                .build();
+        Response response = client.request(Url.URL_OFFER_LIST+para);
         OfferEntity offerEntity = client.parseResponse(OfferEntity.class, response);
         parseData(offerEntity);
 
@@ -41,6 +47,7 @@ public class RequestModel {
             for (OfferDetailInfo.DataBean.ListBean item :
                     entity) {
                 item.setDate(date.get(index));
+                result.add(item);
             }
             index++;
         }
@@ -68,9 +75,12 @@ public class RequestModel {
 
     private void requestDetail(Long date){
         int num = (count/30) + 1;
-
-        String actualUrl = Url.URL_OFFER_DETAIL + "&" + Key.insertDate +"=" +
-                date + "&" + Key.pageNo + "="+num;
+        String param = new ParamWrapper.ParamBuilder()
+                .addParam(Key.insertDate, String.valueOf(date))
+                .addParam(Key.pageNo, String.valueOf(num))
+                .addShopId()
+                .build();
+        String actualUrl = Url.URL_OFFER_DETAIL + param;
 
         if(count < total){
             try {
@@ -96,7 +106,11 @@ public class RequestModel {
 
     private void requestUnSaleInternal(){
         int num = (count/30) + 1;
-        String actualUrl = Url.URL_UNSALE + "&pageNo=" +num;
+        String param = new ParamWrapper.ParamBuilder()
+                .addShopId()
+                .addParam(Key.pageNo, String.valueOf(num))
+                .build();
+        String actualUrl = Url.URL_UNSALE + param;
 
         if(count < total) {
             try {
@@ -105,7 +119,7 @@ public class RequestModel {
                 unsaleList.addAll(tmp.getData().getList());
                 total = tmp.getData().getTotal();
                 count += 30;
-                requestUnSale();
+                requestUnSaleInternal();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -114,7 +128,12 @@ public class RequestModel {
 
     public List<NewItemEntity.DataBean.ListBean> requestNewItem(){
         int num = (count/30) + 1;
-        String actualUrl = Url.URL_NEW_ITEM + "&pageNo=" +num;
+        String param = new ParamWrapper.ParamBuilder()
+                .addDate()
+                .addShopId()
+                .addParam(Key.pageNo, String.valueOf(num))
+                .build();
+        String actualUrl = Url.URL_NEW_ITEM + param;
 
         if(count < total) {
             Response response = client.request(actualUrl);
@@ -134,7 +153,10 @@ public class RequestModel {
     public List<ItemDetailEntity.DataBean> requestItemDetails(){
         for (UnSaleEntity.DataBean.ListBean item :
                 unsaleList) {
-            String actualUrl = Url.URL_ITEM_DETAIL + "&id=" +item.getId();
+            String param = new ParamWrapper.ParamBuilder()
+                    .addParam(Key.shopId, String.valueOf(item.getId()))
+                    .build();
+            String actualUrl = Url.URL_ITEM_DETAIL + param;
 
             Response response = client.request(actualUrl);
             try {
@@ -148,11 +170,18 @@ public class RequestModel {
     }
 
     public List<ShopDetailEntity.DataBean.ListBean> requestShopDetails(){
-        long startDate = 1513353600000l;
-        long endDate = 1513872000000l;
+        long startDate = Long.parseLong(ParamWrapper.getStartDate());
+        long endDate = Long.parseLong(ParamWrapper.getEndDate());
 
-        String actualUrl = Url.URL_SHOP_DETAIL + "&startDate=" + String.valueOf(startDate - (count * 604800000l))
-                + "&endDate=" + String.valueOf(endDate - (count * 604800000l));
+        Duration duration = Duration.ofDays(7);
+        startDate = startDate - duration.toMillis() * count;
+        endDate = endDate - duration.toMillis() * count;
+        String param = new ParamWrapper.ParamBuilder()
+                .addParam(Key.startDate, String.valueOf(startDate))
+                .addParam(Key.endDate, String.valueOf(endDate))
+                .addShopId()
+                .build();
+        String actualUrl = Url.URL_SHOP_DETAIL + param;
 
         if(count < 4) {
             Response response = client.request(actualUrl);
@@ -170,7 +199,12 @@ public class RequestModel {
 
     public List<RenameEntity.DataBean.ListBean> requestRename(){
         int num = (count/30) + 1;
-        String actualUrl = Url.URL_RENAME + "&pageNo=" +num;
+        String param = new ParamWrapper.ParamBuilder()
+                .addShopId()
+                .addDate()
+                .addParam(Key.pageNo, String.valueOf(num))
+                .build();
+        String actualUrl = Url.URL_RENAME + param;
 
         if(count < total) {
             Response response = client.request(actualUrl);
@@ -189,7 +223,12 @@ public class RequestModel {
 
     public List<ZuanShiEntity.DataBean.ListBean> requestZuanShi(){
         int num = (count/30) + 1;
-        String actualUrl = Url.URL_ZUANSHI + "&pageNo=" +num;
+        String param = new ParamWrapper.ParamBuilder()
+                .addDate()
+                .addId()
+                .addParam(Key.pageNo, String.valueOf(num))
+                .build();
+        String actualUrl = Url.URL_ZUANSHI + param;
 
         if(count < total) {
             Response response = client.request(actualUrl);
@@ -208,7 +247,12 @@ public class RequestModel {
 
     public List<TaoBaoKeEntity.DataBean.ListBean> requestTaobaoke(){
         int num = (count/30) + 1;
-        String actualUrl =Url.URL_TAOBAOKE + "&pageNo=" +num;
+        String param = new ParamWrapper.ParamBuilder()
+                .addId()
+                .addDate()
+                .addParam(Key.pageNo, String.valueOf(num))
+                .build();
+        String actualUrl =Url.URL_TAOBAOKE + param;
         if(count < total) {
             Response response = client.request(actualUrl);
             try {
@@ -226,7 +270,12 @@ public class RequestModel {
 
     public List<JuHuaSuanEntity.DataBean.ListBean> requestJuHuaSuan(){
         int num = (count/30) + 1;
-        String actualUrl = Url.URL_JUHUASUAN + "&pageNo=" +num;
+        String param = new ParamWrapper.ParamBuilder()
+                .addId()
+                .addDate()
+                .addParam(Key.pageNo, String.valueOf(num))
+                .build();
+        String actualUrl = Url.URL_JUHUASUAN + param;
 
         if(count < total) {
             Response response = client.request(actualUrl);
@@ -235,6 +284,7 @@ public class RequestModel {
                 juhuasuanList.addAll(tmp.getData().getList());
                 total = tmp.getData().getTotal();
                 count += 30;
+                requestJuHuaSuan();
             } catch (Exception e) {
                 e.printStackTrace();
             }

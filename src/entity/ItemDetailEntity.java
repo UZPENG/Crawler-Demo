@@ -83,10 +83,10 @@ public class ItemDetailEntity {
         private String itemLink;
         private int juhuasuan;
         private int offer30;
-        private int oriPrice;
+        private double oriPrice;
         private int p4p;
-        private int price;
-        private int price30;
+        private double price;
+        private double price30;
         private double promotionRatio;
         private int rank;
         private int rate;
@@ -196,11 +196,11 @@ public class ItemDetailEntity {
             this.offer30 = offer30;
         }
 
-        public int getOriPrice() {
+        public double getOriPrice() {
             return oriPrice;
         }
 
-        public void setOriPrice(int oriPrice) {
+        public void setOriPrice(double oriPrice) {
             this.oriPrice = oriPrice;
         }
 
@@ -212,19 +212,19 @@ public class ItemDetailEntity {
             this.p4p = p4p;
         }
 
-        public int getPrice() {
+        public double getPrice() {
             return price;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(double price) {
             this.price = price;
         }
 
-        public int getPrice30() {
+        public double getPrice30() {
             return price30;
         }
 
-        public void setPrice30(int price30) {
+        public void setPrice30(double price30) {
             this.price30 = price30;
         }
 

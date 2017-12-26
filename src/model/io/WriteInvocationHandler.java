@@ -37,6 +37,12 @@ public class WriteInvocationHandler implements InvocationHandler {
             Sheet sheet = workbook.createSheet();
 
             writeIntoExcelProxy.setSheet(sheet);
+
+            Row row = sheet.createRow(0);
+            for (int i = 0; i < titles.length; i++) {
+                row.createCell(i).setCellValue(titles[i]);
+            }
+
             switch (flag){
                 case WriteProxy.FLAG_OFFER_DETAIL:
                     writeIntoExcelProxy.offerDetailOutput(list);
@@ -69,10 +75,6 @@ public class WriteInvocationHandler implements InvocationHandler {
                 case WriteProxy.FLAG_TAOBAOKE:
                     writeIntoExcelProxy.taobaokeOutput(list);
                     break;
-            }
-            Row row = sheet.createRow(0);
-            for (int i = 0; i < titles.length; i++) {
-                row.createCell(i).setCellValue(titles[i]);
             }
 
             System.out.println("开始写入文件。。。");

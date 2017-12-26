@@ -86,7 +86,7 @@ public class RenameEntity {
             private String newer;
             private String oldTitle;
             private String older;
-            private int price;
+            private double price;
             private String title;
 
             public long getChangeDate() {
@@ -145,11 +145,11 @@ public class RenameEntity {
                 this.older = older;
             }
 
-            public int getPrice() {
+            public double getPrice() {
                 return price;
             }
 
-            public void setPrice(int price) {
+            public void setPrice(double price) {
                 this.price = price;
             }
 
