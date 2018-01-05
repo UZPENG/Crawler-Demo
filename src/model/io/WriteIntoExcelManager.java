@@ -7,7 +7,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import static entity.OfferDetailInfo.*;
+import static entity.OfferDetailInfo.DataBean;
 
 /**
  * @author serverliu on 2017/12/24.

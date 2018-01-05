@@ -3,9 +3,9 @@ package model.net;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import entity.OfferEntity;
-import okhttp3.*;
-import org.json.JSONObject;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.IOException;
 

@@ -3,11 +3,15 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'application'
 
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+sourceSets {
+    main.java.srcDirs 'src'
 }
 
 dependencies {
@@ -15,7 +19,7 @@ dependencies {
     compile group: 'org.apache.poi', name: 'poi', version: '3.17'
     compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.9.1'
     compile group: 'org.json', name: 'json', version: '20160810'
-    // https://mvnrepository.com/artifact/com.google.code.gson/gson
     compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
-
 }
+
+mainClassName = 'Main'
